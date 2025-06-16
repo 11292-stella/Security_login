@@ -22,25 +22,22 @@ public class JwtTool {
     @Value("${jwt.secret}")
     private String chiaveSegreta;
 
-
     public String createToken(User user){
 
 
-        return Jwts.builder().issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis()+durata))
-                .subject(user.getId()+"")
-                .signWith(Keys.hmacShaKeyFor(chiaveSegreta.getBytes()))
-                .compact();
-
-
+        return Jwts.builder().issuedAt(new Date()).
+                expiration(new Date(System.currentTimeMillis()+durata)).
+                subject(String.valueOf(user.getId())).
+                signWith(Keys.hmacShaKeyFor(chiaveSegreta.getBytes())).
+                compact();
     }
 
 
+    //metodo per la verifica della validità del token
     public void validateToken(String token){
-        Jwts.parser().verifyWith(Keys.hmacShaKeyFor(chiaveSegreta.getBytes()))
-                .build().parse(token);
+        Jwts.parser().verifyWith(Keys.hmacShaKeyFor(chiaveSegreta.getBytes())).
+                build().parse(token);
     }
-
 
 
 }
